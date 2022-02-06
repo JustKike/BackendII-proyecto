@@ -198,7 +198,7 @@ function mostrarPassword(){
 			<div style="border-top:1px solid gray;"></div>
 			<br>
 				<span class="pull-left"><a href="#addnew" data-toggle="modal" class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span> Agregar Registro</a></span>
-				<span class="pull-right"><a href="#" data-toggle="modal" class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span> Agregar Orden de compra</a></span>
+				<span class="pull-right"><a href="#addneworder" data-toggle="modal" class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span> Agregar Orden de compra</a></span>
 				<div style="height:50px;"></div>
 
 					<table class="table table-striped table-bordered table-hover">
@@ -236,10 +236,14 @@ function mostrarPassword(){
 								<?php } ?>
 						</tbody>
 					</table>
+					<form action="../menu.php">
+					<button class="button pull-left" style="vertical-align:middle;width: 10%;"><span>Atrás</span></button>
+					</form>
+					<form action="consulta_compra.php">
+					<button class="button pull-right" style="width: 15%;"><span>Consultar orden de compra</span></button>
+					</form>
 				<div style="height:10px;"></div>
-				<form action="../menu.php">
-				<button class="button" style="vertical-align:middle;width: 10%;"><span>Atrás </span></button>
-				</form>
+
 		</div>
 		<?php include('add_modal.php'); ?>
 	</div>
