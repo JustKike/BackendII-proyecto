@@ -194,7 +194,7 @@ $contar = $_SESSION["contar"]; //guardar en una variable más manejable.
             <button class="button" style="vertical-align:middle"><span>productos </span></button>
           </form>
           <div style="height:5px;"></div>
-          <form action="">
+          <form action="crud_ventas/index.php">
             <button class="button" style="vertical-align:middle"><span>ventas </span></button>
           </form>
           <div style="height:5px;"></div>

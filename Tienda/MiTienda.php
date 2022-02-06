@@ -46,6 +46,10 @@ require_once "ShoppingCart.php";
 
 $member_id = $_SESSION['user']; // you can your integerate authentication module here to get logged in member
 
+$Object = new DateTime();  
+$Object->setTimezone(new DateTimeZone('America/Tijuana'));
+$DateAndTime = $Object->format("d-m-Y h:i:s a"); //Fecha y hora en formato especifico
+
 $shoppingCart = new ShoppingCart();
 
 if (!empty($_GET["action"])) {
@@ -74,6 +78,14 @@ if (!empty($_GET["action"])) {
     case "empty":
       // Empty cart
       $shoppingCart->emptyCart($member_id);
+      break;
+    case "sold":
+      if (!empty($_GET["qty"])) {
+      //Agrega una sola entrada a la tabla compras
+      $shoppingCart->addToSold($_GET["id"], $_GET["name"],$_GET["qty"], $_GET["precio"], $member_id, $DateAndTime);
+      $shoppingCart->deleteCartItem($_GET["Id"]);
+      }
+        
       break;
   }
 }
@@ -349,7 +361,7 @@ if (!empty($_GET["action"])) {
     }
 
     .cart-item-container {
-      padding: 5px 10px;
+      padding: 15px 10px;
       border-bottom: #e2e2e2 1px solid;
       background-color: #FBFCFC;
     }
@@ -709,6 +721,9 @@ if (!empty($_GET["action"])) {
 
 
                 <div class="cart-info action">
+                  <a href="MiTienda.php?action=sold&id=<?php echo $item["code"]; ?>&name=<?php echo $item["name"]; ?>&qty=<?php echo $item["quantity"]; ?>&precio=<?php echo ($item["precio"] * $item["quantity"]); ?>&Id=<?php echo $item["cart_id"]; ?>" 
+                  class="btnRemoveAction"><img src="assets/img/shopping_bag.png" alt="icon-sold" title="Comprar" style="width:90%"/></a>
+                  
                   <a href="MiTienda.php?action=remove&id=<?php echo $item["cart_id"]; ?>" class="btnRemoveAction"><img src="assets/img/icon-delete.png" alt="icon-delete" title="Remove Item" /></a>
                 </div>
               </div>
@@ -882,7 +897,7 @@ if (!empty($_GET["action"])) {
             </div>
           </div>
           <textarea class="form-control" id="comments" name="comments" placeholder="Comment" rows="5"></textarea><br>
-          <!-- Boton para envair los datos -->
+          <!-- Boton para enviar los datos -->
           <div class="row">
             <div class="col-sm-12 form-group">
               <button class="btn btn-default pull-right" type="submit">Enviar</button>
