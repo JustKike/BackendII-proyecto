@@ -1,38 +1,38 @@
 <?php
-	session_start();
+session_start();
 
-	//si no existe una sesión llamada rol, lo dirige al login
-	if (!isset($_SESSION['rol'])) {
-		header('location: login.php');
-	} else {
-		//si el usuario rol es de cliente lo redirije al index5
-		if ($_SESSION['rol'] == 'Cli') {
-			header('location: ../index5.php');
-			exit;
-		}
-	}
-
-	if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) {
-	} else {
-		echo "Esta pagina  es solo para usuarios registrados.<br>";
-		header('Location: ../index3.php');
+//si no existe una sesión llamada rol, lo dirige al login
+if (!isset($_SESSION['rol'])) {
+	header('location: login.php');
+} else {
+	//si el usuario rol es de cliente lo redirije al index5
+	if ($_SESSION['rol'] == 'Cli') {
+		header('location: ../index5.php');
 		exit;
 	}
-	$now = time();
+}
 
-	if ($now > $_SESSION['expire']) {
-		session_destroy();
-		echo "su sesion a terminado.<br>";
-		header('Location: ../index4.php');
-		exit;
-	}
-	//numero de recargas
-	if (isset($_SESSION["contar"])) { //Comprueba si el contador existe.
-		$_SESSION["contar"]++; //si existe añade una unidad al contador.
-	} else {
-		$_SESSION["contar"] = 1; //si no existe se crea con valor 1 inicial.
-	}
-	$contar = $_SESSION["contar"]; //guardar en una variable más manejable.
+if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) {
+} else {
+	echo "Esta pagina  es solo para usuarios registrados.<br>";
+	header('Location: ../index3.php');
+	exit;
+}
+$now = time();
+
+if ($now > $_SESSION['expire']) {
+	session_destroy();
+	echo "su sesion a terminado.<br>";
+	header('Location: ../index4.php');
+	exit;
+}
+//numero de recargas
+if (isset($_SESSION["contar"])) { //Comprueba si el contador existe.
+	$_SESSION["contar"]++; //si existe añade una unidad al contador.
+} else {
+	$_SESSION["contar"] = 1; //si no existe se crea con valor 1 inicial.
+}
+$contar = $_SESSION["contar"]; //guardar en una variable más manejable.
 
 ?>
 
@@ -208,53 +208,63 @@
 			</h2>
 			<div style="border-top:1px solid gray;"></div>
 			<br>
-				<span class="pull-left"><a href="#addnew" data-toggle="modal" class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span> Agregar Registro</a></span>
-				<span class="pull-right"><a href="#addneworder" data-toggle="modal" class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span> Agregar Orden de compra</a></span>
-				<div style="height:50px;"></div>
+			<span class="pull-left"><a href="#addnew" data-toggle="modal" class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span> Agregar Registro</a></span>
+			<span class="pull-right"><a href="#addneworder" data-toggle="modal" class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span> Agregar Orden de compra</a></span>
+			<div style="height:50px;"></div>
 
-					<table class="table table-striped table-bordered table-hover">
-						<thead>
-							<th ><center>Nombre</center></th>
-							<th ><center>Dirección</center></th>
-							<th width="15%"><center>Teléfono</center></th>
-							<th ><center>Correo</center></th>
-							<th width="auto"><center>Acción</center></th>
-						</thead>
-						<tbody>
-						<?php
-							include('conn.php');
-							$query=mysqli_query($conn,"select * from `proveedor`");
-							while($row=mysqli_fetch_array($query)){
-								?>
-								<tr>
-									<td align="center"><?php echo ucwords($row['nombre']); ?></td>
-									<td align="center"><?php echo ucwords($row['direccion']); ?></td>
-									<td align="center"><?php echo ucwords($row['telefono']); ?></td>
-									<td align="center"><?php echo ucwords($row['correo']); ?></td>
-									<td >
-										<div class="dropdown">
-											<button onclick="myFunction()" class="dropbtn button" style="width:100%;"><span class="glyphicon glyphicon-option-vertical"></span>Opciones</button>
-												<div id="myDropdown" class="dropdown-content">
-													<a href="#edit<?php echo $row['id']; ?>" data-toggle="modal" class="btn btn-warning button" >
-													<span class="glyphicon glyphicon-edit"></span>Editar</a>
-													<a  href="#del<?php echo $row['id']; ?>" data-toggle="modal" class="btn btn-danger button" >
-													<span class="glyphicon glyphicon-trash"></span> Eliminar</a>
-												</div>
-										</div>
-										<?php include('button.php'); ?>
-									</td>
-									</tr>
-								<?php } ?>
-						</tbody>
-					</table>
-					<form action="../menu.php">
-					<button class="button pull-left" style="vertical-align:middle;width: 10%;"><span>Atrás</span></button>
-					</form>
-					<form action="consulta_compra.php">
-					<button class="button pull-right" style="width: 15%;"><span>Consultar orden de compra</span></button>
-					</form>
-				<div style="height:10px;"></div>
-
+			<table class="table table-striped table-bordered table-hover">
+				<thead>
+					<th>
+						<center>Nombre</center>
+					</th>
+					<th>
+						<center>Dirección</center>
+					</th>
+					<th width="15%">
+						<center>Teléfono</center>
+					</th>
+					<th>
+						<center>Correo</center>
+					</th>
+					<th width="auto">
+						<center>Acción</center>
+					</th>
+				</thead>
+				<tbody>
+					<?php
+					include('conn.php');
+					$query = mysqli_query($conn, "select * from `proveedor`");
+					while ($row = mysqli_fetch_array($query)) {
+					?>
+						<tr>
+							<td align="center"><?php echo ucwords($row['nombre']); ?></td>
+							<td align="center"><?php echo ucwords($row['direccion']); ?></td>
+							<td align="center"><?php echo ucwords($row['telefono']); ?></td>
+							<td align="center"><?php echo ucwords($row['correo']); ?></td>
+							<td>
+								<div class="dropdown">
+									<button onclick="myFunction()" class="dropbtn button" style="width:100%;"><span class="glyphicon glyphicon-option-vertical"></span>Opciones</button>
+									<div id="myDropdown" class="dropdown-content">
+										<a href="#edit<?php echo $row['id']; ?>" data-toggle="modal" class="btn btn-warning button">
+											<span class="glyphicon glyphicon-edit"></span>Editar</a>
+										<a href="#del<?php echo $row['id']; ?>" data-toggle="modal" class="btn btn-danger button">
+											<span class="glyphicon glyphicon-trash"></span> Eliminar</a>
+									</div>
+								</div>
+								<?php include('button.php'); ?>
+							</td>
+						</tr>
+					<?php } ?>
+				</tbody>
+			</table>
+			<div style="height:40px;">
+			<form action="../menu.php">
+				<button class="button pull-left" style="vertical-align:middle;width: 10%;"><span>Atrás</span></button>
+			</form>
+			<form action="consulta_compra.php">
+				<button class="button pull-right" style="width: 15%;"><span>Consultar orden de compra</span></button>
+			</form>
+			</div>
 		</div>
 		<?php include('add_modal.php'); ?>
 	</div>

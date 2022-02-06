@@ -76,34 +76,120 @@ $contar = $_SESSION["contar"]; //guardar en una variable más manejable.
 
 	body {
 		background-color: #ffdd90;
-		background: url(assets/img/fondo3.jpg)no-repeat center center fixed;
-		background-size: cover;
-		-moz-background-size: cover;
-		-webkit-background-size: cover;
-		-o-background-size: cover;
+		background-image: url("../assets/img/wall-background-or.jpg");
+		margin: 29px;
+		padding: auto;
+	}
+
+	.sombra_svg {
+		-webkit-filter: drop-shadow(0px 0px 5px #333);
+		filter: drop-shadow(0px 0px 5px #333);
+	}
+
+	.button {
+		display: inline-block;
+		border-radius: 4px;
+		background-color: #3498DB;
+		border: #273746;
+		color: #FFFFFF;
+		text-align: center;
+		font-size: 13px;
+		padding: 10px;
+		transition: all 0.5s;
+		cursor: pointer;
+		margin: 5px;
+		border-radius: 15px;
+		box-shadow: 0 0 10px 3px #273746;
+	}
+
+	.button span {
+		cursor: pointer;
+		display: inline-block;
+		position: relative;
+		transition: 0.5s;
+	}
+
+	.button span:after {
+		content: "";
+		position: absolute;
+		opacity: 0;
+		top: -0.9em;
+		right: -5px;
+		transition: 0.5s;
+		width: 40px;
+		height: 40px;
+		transform: scale(0.05);
+	}
+
+	.button:hover {
+		background-color: #000080;
+		box-shadow: 0 0 10px 0 #273746 inset, 0 0 10px 4px #273746;
+
+	}
+
+	.button:hover span {
+		padding-right: 25px;
+	}
+
+	.button:hover span:after {
+		opacity: 1;
+		right: 0;
+	}
+
+	.button:active {
+		background-color: #273746;
+		box-shadow: 0 5px #1C2833;
+		transform: translateY(4px);
+		box-shadow: 0 0 10px 0 #273746 inset, 0 0 10px 4px #273746;
+	}
+
+	.dropbtn {
+		display: inline-block;
+		border-radius: 4px;
+		background-color: #4CAF50;
+		border: #273746;
+		color: #FFFFFF;
+		text-align: center;
+		font-size: 13px;
+		padding: 10px;
+		transition: all 0.5s;
+		cursor: pointer;
+		margin: 5px;
+		border-radius: 15px;
+		box-shadow: 0 0 10px 3px #273746;
+	}
+
+	.dropdown {
+		position: relative;
+		display: inline-block;
+	}
+
+	.dropdown-content {
+		display: none;
+		position: absolute;
+		min-width: 160px;
+		z-index: 1;
+	}
+
+	.dropdown-content a {
+		color: black;
+		padding: 12px 16px;
+		text-decoration: none;
+		display: block;
+	}
+
+	.dropdown-content a:hover {
+		background-color: #ddd;
+	}
+
+	.dropdown:hover .dropdown-content {
+		display: block;
+	}
+
+	.dropdown:hover .dropbtn {
+		background-color: #3e8e41;
 	}
 </style>
-
-<script type="text/javascript">
-	function mostrarPassword() {
-		var cambio = document.getElementById("txtPassword");
-		if (cambio.type == "password") {
-			cambio.type = "text";
-			$('.icon').removeClass('fa fa-eye-slash').addClass('fa fa-eye');
-		} else {
-			cambio.type = "password";
-			$('.icon').removeClass('fa fa-eye').addClass('fa fa-eye-slash');
-		}
-	}
-
-	$(document).ready(function() {
-		//CheckBox mostrar contraseña
-		$('#ShowPassword').click(function() {
-			$('#Password').attr('type', $(this).is(':checked') ? 'text' : 'password');
-		});
-	});
-</script>
-
 
 <body>
 	<div class="container">
@@ -147,7 +233,6 @@ $contar = $_SESSION["contar"]; //guardar en una variable más manejable.
 					</th>
 					<th width="auto">
 						<center>Accion</center>
-
 					</th>
 				</thead>
 				<tbody>
@@ -165,7 +250,7 @@ $contar = $_SESSION["contar"]; //guardar en una variable más manejable.
 							<td align="center"><?php echo ucwords($row['Proveedor']); ?></td>
 							<td>
 								<div class="dropdown">
-
+								<button onclick="myFunction()" class="dropbtn button" style="width:100%;"><span class="glyphicon glyphicon-option-vertical"></span>Opciones</button>
 									<div id="myDropdown" class="dropdown-content">
 										<a href="#edit2<?php echo $row['id']; ?>" data-toggle="modal" class="btn btn-warning button">
 											<span class="glyphicon glyphicon-edit"></span>Editar</a>

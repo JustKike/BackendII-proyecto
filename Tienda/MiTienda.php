@@ -722,7 +722,7 @@ if (!empty($_GET["action"])) {
         ?>
       </div>
       <div style="height:20px;"></div>
-      <!--
+      <!-- Comienza contenido oculto, contendor de filtros no 
                     <div class="shopping-cart sombra_svg checkbox" style="background-color: #FDFEFE;border: 15px solid #FDFEFE;">
                     
                     <h2>Tallas</h2>
@@ -832,7 +832,7 @@ if (!empty($_GET["action"])) {
                             </center>
                     </form>
                   </div>
-                  -->
+                  Termina contenido oculto-->
     </div>
 
     <div class="main">
