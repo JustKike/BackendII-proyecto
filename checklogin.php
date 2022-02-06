@@ -39,21 +39,14 @@
         $_SESSION['expire'] = $_SESSION['start'] + (5 * 60); //(2 * 60)
         echo "Bienvnido! " . $_SESSION['user'];
 
-        // if($row['userrol'] == "Cli"){
-        //     header('Location: Tienda/MiTienda.php');
-        //     mysqli_close($conexion); 
-        // }
-
-        // header('Location: menu.php');
-        // mysqli_close($conexion); 
-
         if ($row == true) {
             //validar rol
             $_SESSION['rol'] = $row['userrol'];
-
+            //si el user es nivel cliente sera enviado directamente a la tienda
             if ($_SESSION['rol']  == 'Cli') {
                 header('Location: Tienda/MiTienda.php');
                 mysqli_close($conexion);
+            //si es usuario administrador sera enviado al menu de operaciones
             } else {
                 header('Location: menu.php');
                 mysqli_close($conexion);

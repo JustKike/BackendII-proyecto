@@ -33,7 +33,6 @@ if (isset($_SESSION["contar"])) { //Comprueba si el contador existe.
 }
 $contar = $_SESSION["contar"]; //guardar en una variable más manejable.
 
-
 ?>
 
 <!DOCTYPE html>
