@@ -10,15 +10,15 @@
 			exit;
 		}
 	}
-
+	// verifica si hay inicio de sesion
 	if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) {
 	} else {
 		echo "Esta pagina  es solo para usuarios registrados.<br>";
 		header('Location: ../index3.php');
 		exit;
 	}
+	// termina la sesion despues de cierto tiempo
 	$now = time();
-
 	if ($now > $_SESSION['expire']) {
 		session_destroy();
 		echo "su sesion a terminado.<br>";
@@ -40,6 +40,7 @@
 <html>
 
 <head>
+	<!-- meta datos de la aplicacion -->
 	<title>GESTION DE USUARIOS</title>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
@@ -48,6 +49,7 @@
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 	<link rel="stylesheet" href="assets/css/main.min.css">
 </head>
+<!-- Estilos para los elementos de la pagina -->
 <style>
 	h1 {
 		font-family: Georgia, 'Times New Roman', Times, serif;
@@ -183,12 +185,16 @@
 </style>
 
 <body>
+	<!-- contenedor -->
 	<div class="container" style="margin:auto; padding:auto; height: auto;word-wrap: break-word;">
+		<!-- espacio entre los elementos -->
 		<div style="height:50px;"></div>
+		<!-- titulo de encabezado -->
 		<div class="well sombra_svg" style="margin:auto; padding:auto; width:110%;">
 			<center>
 				<h1 class="text-center border rounded shadow" style="color: rgb(0, 255, 255);background-color: rgba(8, 0, 0);font-size: 20px;filter: blur(0px);padding: 20px;">
 					Bienvenido <?php echo  $_SESSION['user']; ?></h1>
+					<!-- estilo de texto para fecha -->
 				<?php
 				date_default_timezone_set("America/Tijuana");
 				$color = "#58D68D";
@@ -197,19 +203,21 @@
 				$color4 = "#FD6563";
 				$date1 = date('Y-m-d H:i:s', $_SESSION['start']);
 				$date2 = date('Y-m-d H:i:s', $_SESSION['expire']);
-
+				// insertamos fecha de inicio de sesion y fecha de expiracion
 				echo "<p><font color='" . $color . "'>" . $date1 . " / " . "</font>" . "<font color='" . $color4 . "'>" . $date2 . "</font></p>";
 				echo "<p><font color='" . $color2 . "'>" . "Número de páginas recorridas o recargadas: " . "</font>" . "<font color='" . $color3 . "'>" . $contar . "</font></p>";
 				?>
 			</center>
+			<!-- Segundo titulo -->
 			<div style="border-top:1px solid gray;"></div>
 			<h2 class="text-center border rounded shadow" style="color: rgb(253, 155, 8);font-size: 40px;">
 				<center><strong>GESTION DE VENTAS</strong></center>
 			</h2>
 			<div style="border-top:1px solid gray;"></div>
 			<br>
-
+			<!-- inciamos tabla para el crud -->
 			<table class="table table-striped table-bordered table-hover">
+				<!-- cabeza de la tabla -->
 				<thead>
 					<th>
 						<center>ID Venta</center>
@@ -236,13 +244,16 @@
 						<center>Accion</center>
 					</th>
 				</thead>
+				<!-- insertamos filas -->
 				<tbody>
+					<!-- conexion con la BD -->
 					<?php
 					include('conn.php');
-
+					// Seleccionamos los datos de la BD
 					$query = mysqli_query($conn, "select * from `tbl_sold`");
 					while ($row = mysqli_fetch_array($query)) {
-					?>
+					?> 
+					<!-- elementos para filas -->
 						<tr>
 							<td align="center"><?php echo ucwords($row['id']); ?></td>
 							<td align="center"><?php echo ucwords($row['product_id']); ?></td>
@@ -252,6 +263,7 @@
 							<td align="center"><?php echo ucwords($row['member_id']); ?></td>
 							<td align="center"><?php echo $row['date']; ?></td>
 							<td>
+								<!-- dropdown para botones de accion editar/eliminar -->
 								<div class="dropdown">
 									<button onclick="myFunction()" class="dropbtn button" style="width:100%;"><span class="glyphicon glyphicon-option-vertical"></span>Options</button>
 									<div id="myDropdown" class="dropdown-content">
@@ -261,12 +273,14 @@
 											<span class="glyphicon glyphicon-trash"></span> Eliminar</a>
 									</div>
 								</div>
+								<!-- llamamos el archivo button para editar o eliminar contenido -->
 								<?php include('button.php'); ?>
 							</td>
 						</tr>
 					<?php } ?>
 				</tbody>
 			</table>
+			<!-- boton para volver atras -->
 			<div style="height:10px;"></div>
 			<form action="../menu.php">
 				<button class="button" style="vertical-align:middle;width: 10%;"><span>atras </span></button>

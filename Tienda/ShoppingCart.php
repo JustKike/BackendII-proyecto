@@ -101,9 +101,10 @@ class ShoppingCart extends DBController
         
         $this->updateDB($query, $params);
     }
-
+    // borra un elemento del carrito de compras
     function deleteCartItem($cart_id)
     {
+        // query para borrar el item de la BD
         $query = "DELETE FROM tbl_cart WHERE id = ?";
         
         $params = array(
@@ -129,38 +130,45 @@ class ShoppingCart extends DBController
         
         $this->updateDB($query, $params);
     }
-    // Agregar a tabla compras
+    // Agregar un item a tabla de compras
     function addToSold($product_id, $name, $quantity, $costo, $member_id,$DateAndTime)
     {
+        // Query para insertar datos en la BD
         $query = "INSERT INTO tbl_sold (product_id, name, quantity, costo, member_id, date) VALUES (?, ?, ?, ?, ?, ?)";
-        
+        // Array de propiedades y parametros esperados
         $params = array(
+            // id del producto
             array(
                 "param_type" => "s",
                 "param_value" => $product_id
             ),
+            // nombre del producto
             array(
                 "param_type" => "s",
                 "param_value" => $name
             ),
+            // cantidad
             array(
                 "param_type" => "i",
                 "param_value" => $quantity
             ),
+            // Costo del producto
             array(
                 "param_type" => "d",
                 "param_value" => $costo
             ),
+            // usuario
             array(
                 "param_type" => "s",
                 "param_value" => $member_id
             ),
+            // Fecha de compra
             array(
                 "param_type" => "s",
                 "param_value" => $DateAndTime
             )
         );
-        
+        // Actualizamos la tabla en la BD
         $this->updateDB($query, $params);
     }
 }

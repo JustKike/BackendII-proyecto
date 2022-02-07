@@ -11,15 +11,15 @@ if (!isset($_SESSION['rol'])) {
 		exit;
 	}
 }
-
+// Verifica si hay sesion iniciada
 if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) {
 } else {
 	echo "Esta pagina  es solo para usuarios registrados.<br>";
 	header('Location: ../index3.php');
 	exit;
 }
+// Guarda el tiempo de inicio de sesion y expiracion
 $now = time();
-
 if ($now > $_SESSION['expire']) {
 	session_destroy();
 	echo "su sesion a terminado.<br>";
@@ -40,6 +40,7 @@ $contar = $_SESSION["contar"]; //guardar en una variable más manejable.
 <html>
 
 <head>
+	<!-- Metadatos de la aplicacion -->
 	<title>GESTIÓN DE PROVEEDORES</title>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
@@ -48,6 +49,7 @@ $contar = $_SESSION["contar"]; //guardar en una variable más manejable.
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 	<link rel="stylesheet" href="assets/css/main.min.css">
 </head>
+<!-- estilos de los elementos -->
 <style>
 	h1 {
 		font-family: Georgia, 'Times New Roman', Times, serif;
@@ -183,12 +185,16 @@ $contar = $_SESSION["contar"]; //guardar en una variable más manejable.
 </style>
 
 <body>
+	<!-- Contenedor -->
 	<div class="container" style="margin:auto; padding:auto; height: auto;word-wrap: break-word;">
+		<!-- para agregar espacio entre elementos -->
 		<div style="height:50px;"></div>
+		<!-- Titulo de encabezado con nombre de usuario -->
 		<div class="well sombra_svg" style="margin:auto; padding:auto; width:110%;">
 			<center>
 				<h1 class="text-center border rounded shadow" style="color: rgb(0, 255, 255);background-color: rgba(8, 0, 0);font-size: 20px;filter: blur(0px);padding: 20px;">
 					Bienvenido <?php echo  $_SESSION['user']; ?></h1>
+				<!-- estilos de color para texto en fechas -->
 				<?php
 				date_default_timezone_set("America/Tijuana");
 				$color = "#58D68D";
@@ -197,22 +203,26 @@ $contar = $_SESSION["contar"]; //guardar en una variable más manejable.
 				$color4 = "#FD6563";
 				$date1 = date('Y-m-d H:i:s', $_SESSION['start']);
 				$date2 = date('Y-m-d H:i:s', $_SESSION['expire']);
-
+				// insertamos la fecha de inicio y expiracion de sesion
 				echo "<p><font color='" . $color . "'>" . $date1 . " / " . "</font>" . "<font color='" . $color4 . "'>" . $date2 . "</font></p>";
 				echo "<p><font color='" . $color2 . "'>" . "Número de páginas recorridas o recargadas: " . "</font>" . "<font color='" . $color3 . "'>" . $contar . "</font></p>";
 				?>
 			</center>
+			<!-- Segundo titulo -->
 			<div style="border-top:1px solid gray;"></div>
 			<h2 class="text-center border rounded shadow" style="color: rgb(253, 155, 8);font-size: 40px;">
 				<center><strong>GESTION DE PROVEEDORES</strong></center>
 			</h2>
 			<div style="border-top:1px solid gray;"></div>
 			<br>
+			<!-- Boton para agregar registro -->
 			<span class="pull-left"><a href="#addnew" data-toggle="modal" class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span> Agregar Registro</a></span>
+			<!-- Boton para agregar una orden de compra -->
 			<span class="pull-right"><a href="#addneworder" data-toggle="modal" class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span> Agregar Orden de compra</a></span>
 			<div style="height:50px;"></div>
-
+			<!-- inciamos la tabla para el crud -->
 			<table class="table table-striped table-bordered table-hover">
+				<!-- Cabeza de la tabla -->
 				<thead>
 					<th>
 						<center>Nombre</center>
@@ -230,18 +240,22 @@ $contar = $_SESSION["contar"]; //guardar en una variable más manejable.
 						<center>Acción</center>
 					</th>
 				</thead>
+				<!-- Insertamos las filas -->
 				<tbody>
+					<!-- conexion con la BD -->
 					<?php
 					include('conn.php');
 					$query = mysqli_query($conn, "select * from `proveedor`");
 					while ($row = mysqli_fetch_array($query)) {
 					?>
+						<!-- Elementos para las filas -->
 						<tr>
 							<td align="center"><?php echo ucwords($row['nombre']); ?></td>
 							<td align="center"><?php echo ucwords($row['direccion']); ?></td>
 							<td align="center"><?php echo ucwords($row['telefono']); ?></td>
 							<td align="center"><?php echo ucwords($row['correo']); ?></td>
 							<td>
+								<!-- dropdown para botones de accion editar/eliminar -->
 								<div class="dropdown">
 									<button onclick="myFunction()" class="dropbtn button" style="width:100%;"><span class="glyphicon glyphicon-option-vertical"></span>Opciones</button>
 									<div id="myDropdown" class="dropdown-content">
@@ -251,6 +265,7 @@ $contar = $_SESSION["contar"]; //guardar en una variable más manejable.
 											<span class="glyphicon glyphicon-trash"></span> Eliminar</a>
 									</div>
 								</div>
+								<!-- llamamos el archivo button para editar o eliminar contenido -->
 								<?php include('button.php'); ?>
 							</td>
 						</tr>
@@ -258,14 +273,17 @@ $contar = $_SESSION["contar"]; //guardar en una variable más manejable.
 				</tbody>
 			</table>
 			<div style="height:40px;">
+			<!-- boton para volver atras -->
 			<form action="../menu.php">
 				<button class="button pull-left" style="vertical-align:middle;width: 10%;"><span>Atrás</span></button>
 			</form>
+			<!-- boton para consultar orden de compra -->
 			<form action="consulta_compra.php">
 				<button class="button pull-right" style="width: 15%;"><span>Consultar orden de compra</span></button>
 			</form>
 			</div>
 		</div>
+		<!-- LLamamos al modal -->
 		<?php include('add_modal.php'); ?>
 	</div>
 </body>

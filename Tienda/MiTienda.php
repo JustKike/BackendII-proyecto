@@ -24,7 +24,7 @@ if (!isset($_SESSION['rol'])) {
   if ($_SESSION['rol'] == 'Cli') {
     $urlCli = "../logout.php";
     $nomBtn = "Cerrar";
-  }else{
+  } else {
     //si el usuario rol no es cliente dirige el boton atras al menu 
     $urlCli = "../menu.php";
     $nomBtn = "Atras";
@@ -46,7 +46,7 @@ require_once "ShoppingCart.php";
 
 $member_id = $_SESSION['user']; // you can your integerate authentication module here to get logged in member
 
-$Object = new DateTime();  
+$Object = new DateTime();
 $Object->setTimezone(new DateTimeZone('America/Tijuana'));
 $DateAndTime = $Object->format("d-m-Y h:i:s a"); //Fecha y hora en formato especifico
 
@@ -79,13 +79,14 @@ if (!empty($_GET["action"])) {
       // Empty cart
       $shoppingCart->emptyCart($member_id);
       break;
+      //Agrega elementos a compras. recibe un id, nombre, cantidad y precio.
     case "sold":
       if (!empty($_GET["qty"])) {
-      //Agrega una sola entrada a la tabla compras
-      $shoppingCart->addToSold($_GET["id"], $_GET["name"],$_GET["qty"], $_GET["precio"], $member_id, $DateAndTime);
-      $shoppingCart->deleteCartItem($_GET["Id"]);
+        //Agrega una sola entrada a la tabla compras
+        $shoppingCart->addToSold($_GET["id"], $_GET["name"], $_GET["qty"], $_GET["precio"], $member_id, $DateAndTime);
+        //Bora el item del carrito una vez que se agrego a compras
+        $shoppingCart->deleteCartItem($_GET["Id"]);
       }
-        
       break;
   }
 }
@@ -345,7 +346,7 @@ if (!empty($_GET["action"])) {
     }
 
     .cart-info.quantity {
-      width: 96px;
+      width: 100px;
       border: #ccc 1px solid;
     }
 
@@ -659,7 +660,8 @@ if (!empty($_GET["action"])) {
     <a href="#">Link</a>
     <a href="#">Link</a>
     <form action="<?php echo   $urlCli; ?>">
-      <button class="button" style="vertical-align:middle;width: 10%;float: right;"><span><?php echo   $nomBtn; ?> </span></button>
+      <button class="button" style="vertical-align:middle;width: 10%;float: right;"><span><?php echo   $nomBtn; ?>
+        </span></button>
     </form>
   </div>
 
@@ -711,7 +713,8 @@ if (!empty($_GET["action"])) {
                 </div>
 
                 <div class="cart-info quantity">
-                  <div class="btn-increment-decrement" onClick="decrement_quantity(<?php echo $item["cart_id"]; ?>, '<?php echo $item["precio"]; ?>')">-</div><input class="input-quantity" id="input-quantity-<?php echo $item["cart_id"]; ?>" value="<?php echo $item["quantity"]; ?>">
+                  <div class="btn-increment-decrement" onClick="decrement_quantity(<?php echo $item["cart_id"]; ?>, '<?php echo $item["precio"]; ?>')">-</div>
+                  <input class="input-quantity" id="input-quantity-<?php echo $item["cart_id"]; ?>" value="<?php echo $item["quantity"]; ?>">
                   <div class="btn-increment-decrement" onClick="increment_quantity(<?php echo $item["cart_id"]; ?>, '<?php echo $item["precio"]; ?>')">+</div>
                 </div>
 
@@ -719,12 +722,14 @@ if (!empty($_GET["action"])) {
                   <?php echo "$" . ($item["precio"] * $item["quantity"]); ?>
                 </div>
 
-
+                <!-- Botones de accion en el carrito de compras -->
                 <div class="cart-info action">
-                  <a href="MiTienda.php?action=sold&id=<?php echo $item["code"]; ?>&name=<?php echo $item["name"]; ?>&qty=<?php echo $item["quantity"]; ?>&precio=<?php echo ($item["precio"] * $item["quantity"]); ?>&Id=<?php echo $item["cart_id"]; ?>" 
-                  class="btnRemoveAction"><img src="assets/img/shopping_bag.png" alt="icon-sold" title="Comprar" style="width:90%"/></a>
-                  
-                  <a href="MiTienda.php?action=remove&id=<?php echo $item["cart_id"]; ?>" class="btnRemoveAction"><img src="assets/img/icon-delete.png" alt="icon-delete" title="Remove Item" /></a>
+                  <!-- Comprar item -->
+                  <a href="MiTienda.php?action=sold&id=<?php echo $item["code"]; ?>&name=<?php echo $item["name"]; ?>&qty=<?php echo $item["quantity"]; ?>
+                  &precio=<?php echo ($item["precio"] * $item["quantity"]); ?>&Id=<?php echo $item["cart_id"]; ?>" class="btnRemoveAction"><img src="assets/img/shopping_bag.png" alt="icon-sold" title="Comprar" style="width:90%" /></a>
+                  <!-- Remover items del carrito -->
+                  <a href="MiTienda.php?action=remove&id=<?php echo $item["cart_id"]; ?>" class="btnRemoveAction">
+                    <img src="assets/img/icon-delete.png" alt="icon-delete" title="Remove Item" /></a>
                 </div>
               </div>
             <?php
@@ -737,117 +742,6 @@ if (!empty($_GET["action"])) {
         ?>
       </div>
       <div style="height:20px;"></div>
-      <!-- Comienza contenido oculto, contendor de filtros no 
-                    <div class="shopping-cart sombra_svg checkbox" style="background-color: #FDFEFE;border: 15px solid #FDFEFE;">
-                    
-                    <h2>Tallas</h2>
-                    <p>Selecciona productos por talla:</p>
-                    <div style="border-top:1px solid gray;"></div>
-                    <form>
-                      <center>
-                      <label class="radio" style="text-align:left;">
-                        <input type="radio" name="talla" value="">12 cm
-                      </label>
-                      <div style="height:1px;"></div>
-                      <label class="radio" style="text-align:left;">
-                        <input type="radio" name="talla" value="">22 cm
-                      </label>
-                      <div style="height:1px;"></div>
-                      <label class="radio" style="text-align:left;">
-                        <input type="radio" name="talla" value="">22.5 cm
-                      </label>
-                      <div style="height:1px;"></div>
-                      <label class="radio" style="text-align:left;">
-                        <input type="radio" name="talla" value="">23 cm
-                      </label>
-                      <div style="height:1px;"></div>
-                      <label class="radio" style="text-align:left;">
-                        <input type="radio" name="talla" value="">23.5 cm
-                      </label>
-                      <div style="height:1px;"></div>
-                      <label class="radio" style="text-align:left;">
-                        <input type="radio" name="talla" value="">24 cm
-                      </label>
-                      <div style="height:1px;"></div>
-                      <label class="radio" style="text-align:left;">
-                        <input type="radio" name="talla" value="">24.5 cm
-                      </label>
-                      <div style="height:1px;"></div>
-                      <label class="radio" style="text-align:left;">
-                        <input type="radio" name="talla" value="">25 cm
-                      </label>
-                      <div style="height:1px;"></div>
-                      <label class="radio" style="text-align:left;">
-                        <input type="radio" name="talla" value="">25.5 cm
-                      </label>
-                            </center>
-                    </form>
-                    <div style="height:20px;"></div>
-                    <h2>Marcas</h2>
-                    <p>Selecciona productos por marca:</p>
-                    <div style="border-top:1px solid gray;"></div>
-                    <form>
-                      <center>
-                      <?php
-                      include('conn.php');
-
-                      $query = mysqli_query($conn, "SELECT  * FROM `product` GROUP BY brand  ORDER BY brand");
-                      while ($row = mysqli_fetch_array($query)) {
-                        $codigo = $row['id'];
-                      ?>
-                            <div style="height:1px;"></div>
-                            <label class="radio" style="text-align:left;">
-                                    <input type="radio" name="talla" value="">
-                                    <?php echo ucwords($row['brand']); ?>
-                                  </label>
-                                  <?php } ?>
-                            </center>
-                    </form>
-                    <div style="height:20px;"></div>
-                    <h2>Precios</h2>
-                    <p>Selecciona productos por precio:</p>
-                    <div style="border-top:1px solid gray;"></div>
-                    <form>
-                      <center>
-                      <?php
-                      include('conn.php');
-
-                      $query = mysqli_query($conn, "SELECT  * FROM `product` GROUP BY precio ORDER BY precio");
-                      while ($row = mysqli_fetch_array($query)) {
-                        $codigo = $row['id'];
-                      ?>
-                            <div style="height:1px;"></div>
-                            <label class="radio" style="text-align:left;">
-                                    <input type="radio" name="talla" value="">
-                                    <?php echo ucwords($row['precio']); ?>
-                                  </label>
-                                  <?php } ?>
-                            </center>
-                    </form>
-                    <div style="height:20px;"></div>
-                    <h2>Nombre Zapatos</h2>
-                    <p>Selecciona productos por Nombre:</p>
-                    
-                    <div style="border-top:1px solid gray;"></div>
-                    <form>
-                      <center>
-                      <?php
-                      include('conn.php');
-
-                      $query = mysqli_query($conn, "SELECT  * FROM `product` GROUP BY name ORDER BY name");
-                      while ($row = mysqli_fetch_array($query)) {
-                        $codigo = $row['id'];
-                      ?>
-                            <div style="height:1px;"></div>
-                            <label class="radio" style="text-align:left;">
-                                    <input type="radio" name="talla" value="" >
-                                    <?php echo ucwords($row['name']); ?>
-                                  </label>
-                                  <?php } ?>
-                            </center>
-                    </form>
-                  </div>
-                  Termina contenido oculto-->
     </div>
 
     <div class="main">
@@ -865,7 +759,7 @@ if (!empty($_GET["action"])) {
           ?></h5>
       <?php require_once "product-list.php"; ?>
 
-      <a class="cd-top js-cd-top cd-top--fade-out cd-top--show" style="background-image: url('assets/img/cd-top-arrow.svg';);background-color: #f3ab3f;color: rgb(20,84,153);opacity: 0.67;width: 44px;height: 39px;" href="#0">Top</a>
+      <a class="cd-top js-cd-top cd-top--fade-out cd-top--show" style="background-image: url('assets/img/cd-top-arrow.svg');background-color: #f3ab3f;color: rgb(20,84,153);opacity: 0.67;width: 44px;height: 39px;" href="#0">Top</a>
       <script src="assets/js/Bold-BS4-Animated-Back-To-Top.js"></script>
     </div>
 

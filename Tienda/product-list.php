@@ -1,6 +1,6 @@
 <div id="product-grid">
     <div class="txt-heading">
-        <div class="txt-heading-label">Products</div>
+        <div class="txt-heading-label" style="color: white; margin-left: 35px;" >Productos</div>
     </div>
     <?php
     $query = "SELECT * FROM product";
