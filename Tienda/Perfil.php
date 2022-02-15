@@ -1,6 +1,6 @@
 <?php
 session_start();
-
+// verifica si hay inicio de sesion
 if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) {
 } else {
     echo "Esta pagina  es solo para usuarios registrados.<br>";
@@ -8,7 +8,7 @@ if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) {
     exit;
 }
 $now = time();
-
+// termina la sesion despues de cierto tiempo
 if ($now > $_SESSION['expire']) {
     session_destroy();
     echo "su sesion a terminado.<br>";
@@ -38,64 +38,16 @@ if (isset($_SESSION["contar"])) { //Comprueba si el contador existe.
     $_SESSION["contar"] = 1; //si no existe se crea con valor 1 inicial.
 }
 $contar = $_SESSION["contar"]; //guardar en una variable más manejable.
+
+// guardamos el usuario
+$member_id = $_SESSION['user'];
 ?>
-<?php
-//ShoppingCart
 
-require_once "ShoppingCart.php";
-
-$member_id = $_SESSION['user']; // you can your integerate authentication module here to get logged in member
-
-$Object = new DateTime();
-$Object->setTimezone(new DateTimeZone('America/Tijuana'));
-$DateAndTime = $Object->format("d-m-Y h:i:s a"); //Fecha y hora en formato especifico
-
-$shoppingCart = new ShoppingCart();
-
-if (!empty($_GET["action"])) {
-    switch ($_GET["action"]) {
-        case "add":
-            if (!empty($_POST["quantity"])) {
-
-                $productResult = $shoppingCart->getProductByCode($_GET["code"]);
-
-                $cartResult = $shoppingCart->getCartItemByProduct($productResult[0]["id"], $member_id);
-
-                if (!empty($cartResult)) {
-                    // Update cart item quantity in database
-                    $newQuantity = $cartResult[0]["quantity"] + $_POST["quantity"];
-                    $shoppingCart->updateCartQuantity($newQuantity, $cartResult[0]["id"]);
-                } else {
-                    // Add to cart table
-                    $shoppingCart->addToCart($productResult[0]["id"], $_POST["quantity"], $member_id);
-                }
-            }
-            break;
-        case "remove":
-            // Delete single entry from the cart
-            $shoppingCart->deleteCartItem($_GET["id"]);
-            break;
-        case "empty":
-            // Empty cart
-            $shoppingCart->emptyCart($member_id);
-            break;
-            //Agrega elementos a compras. recibe un id, nombre, cantidad y precio.
-        case "sold":
-            if (!empty($_GET["qty"])) {
-                //Agrega una sola entrada a la tabla compras
-                $shoppingCart->addToSold($_GET["id"], $_GET["name"], $_GET["qty"], $_GET["precio"], $member_id, $DateAndTime);
-                //Bora el item del carrito una vez que se agrego a compras
-                $shoppingCart->deleteCartItem($_GET["Id"]);
-            }
-            break;
-    }
-}
-
-?>
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
+    <!-- meta datos de la aplicacion -->
     <title>Calzado Endromides</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -105,6 +57,7 @@ if (!empty($_GET["action"])) {
     <link rel="stylesheet" type="text/css" href="assets/css/Bold-BS4-Animated-Back-To-Top.css" />
     <script src="assets/js/jquery-3.2.1.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <!-- Estilos para los elementos de la pagina -->
     <style>
         * {
             box-sizing: border-box;
@@ -201,7 +154,7 @@ if (!empty($_GET["action"])) {
         .main {
             background-color: white;
             padding: 15px;
-            width:100%;
+            width: 100%;
         }
 
         /* Fake image, just for this example */
@@ -581,7 +534,8 @@ if (!empty($_GET["action"])) {
             border: 2px solid white;
 
         }
-        .bordes{
+
+        .bordes {
             border-top-left-radius: 20px;
             border-top-right-radius: 20px;
             border-bottom-left-radius: 20px;
@@ -590,8 +544,9 @@ if (!empty($_GET["action"])) {
             vertical-align: middle;
             box-shadow: inset 0 0 15px 0 #1B2631;
             box-shadow: 1px 4px 10px #101010;
-            }
-            h2 {
+        }
+
+        h2 {
             font-family: "lust-display-didone", serif;
             text-align: center;
             font-weight: bold;
@@ -600,8 +555,9 @@ if (!empty($_GET["action"])) {
             letter-spacing: 0.5rem;
             color: rgb(105, 10, 3);
             text-shadow: 2px 5px 8px #030000;
-            }
-            p {
+        }
+
+        p {
             font-family: Century Schoolbook, Century Schoolbook L, Georgia, serif;
             font-size: 20px;
             text-align: justify;
@@ -609,27 +565,27 @@ if (!empty($_GET["action"])) {
             color: rgb(10, 10, 10);
             font-weight: 100;
             text-shadow: 2px 5px 8px #030000;
-            }
-/* imagen en formulario */
-.container {
-    position: relative;
-    width: 20%;
-    border-radius: 50%;
-  }
+        }
 
-  .image {
-    display: block;
-    width: 20%;
-    height: auto;
-    border-radius: 50%;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-  }
+        /* imagen en formulario */
+        .container {
+            position: relative;
+            width: 20%;
+            border-radius: 50%;
+        }
 
+        .image {
+            display: block;
+            width: 20%;
+            height: auto;
+            border-radius: 50%;
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+        }
     </style>
 </head>
 
 <body>
-
+    <!-- contenedor -->
     <div class="header" style="background-image: url('assets/img/fondo26.jpg');width: 100%; height: 100%; background-size: 100%;">
         <center>
             <!-- Top to bottom -->
@@ -656,126 +612,143 @@ if (!empty($_GET["action"])) {
     </div>
     <!-- barra de navegacion -->
     <nav class="navbar navbar-expand-lg  navbar-dark bg-dark" style="float: none;height: 80px;">
-  <div class="container-fluid">
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll" aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarScroll">
-      <ul class="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll" style="--bs-scroll-height: 100px;">
-        <li class="nav-item">
-          <a class="nav-link" aria-current="page" href="MiTienda.php">Home</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link active" href="Perfil.php" >Mi Pefil</a>
-        </li>
-    </div>
-  </div>
-    <form action="<?php echo   $urlCli; ?>">
-        <button class="button me-md-2 p-4" style="vertical-align:middle;width: 100%;float: right;"><span><?php echo   $nomBtn; ?></span></button>
-    </form>
-</nav>
+        <div class="container-fluid">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll" aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarScroll">
+                <ul class="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll" style="--bs-scroll-height: 100px;">
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="page" href="MiTienda.php">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="Perfil.php">Mi Pefil</a>
+                    </li>
+            </div>
+        </div>
+        <form action="<?php echo   $urlCli; ?>">
+            <button class="button me-md-2 p-4" style="vertical-align:middle;width: 100%;float: right;"><span><?php echo   $nomBtn; ?></span></button>
+        </form>
+    </nav>
     <!-- final de barra de nav -->
-        <!-- Creamos un contendor para los datos -->
-        <div class="ccontainer-fluid" align="center">
-        <div class="card text-dark bg-light bordes w-50 m-5" >
-        <div class="card-header text-white bg-dark" style="border-top-left-radius: 20px;border-top-right-radius: 20px;">
-        <h1 style="color: rgb(253, 155, 8);"><?php echo   $member_id; ?></h1></div>
-        <div class="card-body">
-        <h2 class="card-title">Historial de compras</h2>
-            <hr>
-            <p>Aqui podras encontrar el historial de compras y algunos de tus datos personales, nosotros no compartiremos tus datos personales con nadie.</p>
-            <div class="main" align="center">
-              <img src="assets/img/img_avatar.png" alt="Avatar" class="image">
+    <!-- Creamos un contendor para los datos -->
+    <div class="container-fluid" align="center">
+        <!-- Creamos una Card -->
+        <div class="card text-dark bg-light bordes w-50 m-5">
+            <!-- Creamos la cabeza de la card -->
+            <div class="card-header text-white bg-dark" style="border-top-left-radius: 20px;border-top-right-radius: 20px;">
+                <!-- titulo del encabezado de la card -->
+                <h1 style="color: rgb(253, 155, 8);"><?php echo   $member_id; ?></h1>
             </div>
-            <div class="container-fluid">
-            <?php
-            include('conn.php');
-            $query = mysqli_query($conn, "select * from login where user='".$member_id."'");
-            while ($erow = mysqli_fetch_array($query)) {
-            ?>
-                <div class="row mb-2">
-                    <div class="col-lg-2">
-                        <label style="position:relative; top:7px;">Usuario:</label>
-                    </div>
-                    <div class="col-lg-10">
-                        <input type="text" name="user" class="form-control" value="<?php echo $erow['user']; ?>">
-                    </div>
+            <!-- Cuerpo de la card -->
+            <div class="card-body">
+                <!-- titulo de la tarjeta -->
+                <h2 class="card-title">Historial de compras</h2>
+                <hr>
+                <!-- comentario -->
+                <p>Aqui podras encontrar el historial de compras y algunos de tus datos personales, nosotros no compartiremos tus datos personales con nadie.</p>
+                <!-- contendor para imagen de usuario -->
+                <div class="main" align="center">
+                    <img src="assets/img/img_avatar.png" alt="Avatar" class="image">
                 </div>
-                <div class="row mb-2">
-                    <div class="col-lg-2">
-                        <label style="position:relative; top:7px;">Nombre:</label>
-                    </div>
-                    <div class="col-lg-10">
-                        <input type="text" name="user" class="form-control" value="<?php echo $erow['firstname']; ?>">
-                    </div>
+                <!-- Otro contenedor -->
+                <div class="container-fluid">
+                    <!-- Conexion con la BD -->
+                    <?php
+                    include('conn.php');
+                    $query = mysqli_query($conn, "select * from login where user='" . $member_id . "'");
+                    while ($erow = mysqli_fetch_array($query)) {
+                    ?>
+                        <!-- Etiqueta de Usuario e input -->
+                        <div class="row mb-2">
+                            <div class="col-lg-2">
+                                <label style="position:relative; top:7px;">Usuario:</label>
+                            </div>
+                            <div class="col-lg-10">
+                                <input type="text" name="user" class="form-control" value="<?php echo $erow['user']; ?>">
+                            </div>
+                        </div>
+                        <!-- Etiqueta de Nombre e input -->
+                        <div class="row mb-2">
+                            <div class="col-lg-2">
+                                <label style="position:relative; top:7px;">Nombre:</label>
+                            </div>
+                            <div class="col-lg-10">
+                                <input type="text" name="user" class="form-control" value="<?php echo $erow['firstname']; ?>">
+                            </div>
+                        </div>
+                        <!-- Etiqueta de Apellido e input -->
+                        <div class="row mb-2">
+                            <div class="col-lg-2">
+                                <label style="position:relative; top:7px;">Apellido:</label>
+                            </div>
+                            <div class="col-lg-10">
+                                <input type="text" name="user" class="form-control" value="<?php echo $erow['lastname']; ?>">
+                            </div>
+                        </div>
+                        <!-- Etiqueta de Direccion e input -->
+                        <div class="row mb-2">
+                            <div class="col-lg-2">
+                                <label style="position:relative; top:7px;">Direccion:</label>
+                            </div>
+                            <div class="col-lg-10">
+                                <input type="text" name="user" class="form-control" value="<?php echo $erow['address']; ?>">
+                            </div>
+                        </div>
+                        <!-- Etiqueta de Rol e input -->
+                        <div class="row mb-2">
+                            <div class="col-lg-2">
+                                <label style="position:relative; top:7px;">Rol:</label>
+                            </div>
+                            <div class="col-lg-10">
+                                <input type="text" name="user" class="form-control" value="<?php echo $erow['userrol']; ?>">
+                            </div>
+                        </div>
+                    <?php } ?>
                 </div>
-                <div class="row mb-2">
-                    <div class="col-lg-2">
-                        <label style="position:relative; top:7px;">Apellido:</label>
-                    </div>
-                    <div class="col-lg-10">
-                        <input type="text" name="user" class="form-control" value="<?php echo $erow['lastname']; ?>">
-                    </div>
-                </div>
-                <div class="row mb-2">
-                    <div class="col-lg-2">
-                        <label style="position:relative; top:7px;">Direccion:</label>
-                    </div>
-                    <div class="col-lg-10">
-                        <input type="text" name="user" class="form-control" value="<?php echo $erow['address']; ?>">
-                    </div>
-                </div>
-                <div class="row mb-2">
-                    <div class="col-lg-2">
-                        <label style="position:relative; top:7px;">Rol:</label>
-                    </div>
-                    <div class="col-lg-10">
-                        <input type="text" name="user" class="form-control" value="<?php echo $erow['userrol']; ?>">
-                    </div>
-                </div>
-            <?php } ?>
-            </div>
-            <table class="table table-striped table-bordered table-hover " id="example">
-				<thead>
-					<th>
-						<center>ID Producto:</center>
-					</th>
-                    <th>
-						<center>Nombre Producto:</center>
-					</th>
-                    <th>
-						<center>Cantidad:</center>
-					</th>
-                    <th>
-						<center>Costo:</center>
-					</th>
-                    <th>
-						<center>Fecha:</center>
-					</th>
-				</thead>
-				<tbody>
-                <?php
-                include('conn.php');
-                $query = mysqli_query($conn, "select * from tbl_sold where member_id='".$member_id."'");
-                while ($row = mysqli_fetch_array($query)) {
-                ?>
-                <tr>
-                    <td align="center"><?php echo $row['product_id']; ?></td>
-                    <td align="center"><?php echo $row['name']; ?></td>
-                    <td align="center"><?php echo $row['quantity']; ?></td>
-                    <td align="center"><?php echo '$'.$row['costo']; ?></td>
-                    <td align="center"><?php echo $row['date']; ?></td>
-                </tr>
-                <?php } ?>
-                </tbody>
+                <!-- Creamos una tabla -->
+                <table class="table table-striped table-bordered table-hover " id="example">
+                    <!-- Encabezado de la tabla -->
+                    <thead>
+                        <th>
+                            <center>ID Producto:</center>
+                        </th>
+                        <th>
+                            <center>Nombre Producto:</center>
+                        </th>
+                        <th>
+                            <center>Cantidad:</center>
+                        </th>
+                        <th>
+                            <center>Costo:</center>
+                        </th>
+                        <th>
+                            <center>Fecha:</center>
+                        </th>
+                    </thead>
+                    <!-- Cuerpo de la tabla -->
+                    <tbody>
+                        <!-- Conexion con la BD -->
+                        <?php
+                        include('conn.php');
+                        $query = mysqli_query($conn, "select * from tbl_sold where member_id='" . $member_id . "'");
+                        while ($row = mysqli_fetch_array($query)) {
+                        ?>
+                            <!-- elementos del cuerpo de la tabla -->
+                            <tr>
+                                <td align="center"><?php echo $row['product_id']; ?></td>
+                                <td align="center"><?php echo $row['name']; ?></td>
+                                <td align="center"><?php echo $row['quantity']; ?></td>
+                                <td align="center"><?php echo '$' . $row['costo']; ?></td>
+                                <td align="center"><?php echo $row['date']; ?></td>
+                            </tr>
+                        <?php } ?>
+                    </tbody>
                 </table>
-           
+            </div>
         </div>
-        </div>
-        </div>
-        
-
-
+    </div>
+    <!-- Termina el contendor para los datos -->
 
     <!-- Container (Seccion de comentarios) -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
@@ -814,7 +787,6 @@ if (!empty($_GET["action"])) {
             </div>
         </div>
     </div>
-
 </body>
 
 </html>
