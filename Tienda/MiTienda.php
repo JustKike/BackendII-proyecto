@@ -656,9 +656,8 @@ if (!empty($_GET["action"])) {
   </div>
 
   <div class="navbar">
-    <a href="#" class="active">Home</a>
-    <a href="#">Link</a>
-    <a href="#">Link</a>
+    <a href="MiTienda.php" class="active">Home</a>
+    <a href="Perfil.php">Mi Perfil</a>
     <form action="<?php echo   $urlCli; ?>">
       <button class="button" style="vertical-align:middle;width: 10%;float: right;"><span><?php echo   $nomBtn; ?>
         </span></button>
